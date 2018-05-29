@@ -16,6 +16,8 @@
  */
 package com.alibaba.dubbo.examples.callback.api;
 
+import com.alibaba.dubbo.examples.callback.bean.Person;
+
 /**
  * CallbackService
  */
@@ -23,4 +25,5 @@ public interface CallbackService {
 
     void addListener(String key, CallbackListener listener);
 
+    Person get(int id);
 }

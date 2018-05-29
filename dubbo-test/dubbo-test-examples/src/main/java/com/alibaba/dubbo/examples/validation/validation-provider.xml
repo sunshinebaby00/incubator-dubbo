@@ -23,7 +23,8 @@ limitations under the License.
 
     <dubbo:application name="validation-provider"/>
 
-    <dubbo:registry address="multicast://224.5.6.7:1234"/>
+    <!--<dubbo:registry address="multicast://224.5.6.7:1234"/>-->
+    <dubbo:registry  protocol="zookeeper" address="47.94.102.25:2181"/>
 
     <dubbo:protocol name="dubbo" port="20880"/>
 

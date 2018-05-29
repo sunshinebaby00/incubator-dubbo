@@ -18,6 +18,7 @@ package com.alibaba.dubbo.examples.callback.impl;
 
 import com.alibaba.dubbo.examples.callback.api.CallbackListener;
 import com.alibaba.dubbo.examples.callback.api.CallbackService;
+import com.alibaba.dubbo.examples.callback.bean.Person;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -57,6 +58,11 @@ public class CallbackServiceImpl implements CallbackService {
     public void addListener(String key, CallbackListener listener) {
         listeners.put(key, listener);
         listener.changed(getChanged(key)); // send notification for change
+    }
+
+    @Override
+    public Person get(int id) {
+        return new Person(id, "charles`son", 4);
     }
 
     private String getChanged(String key) {

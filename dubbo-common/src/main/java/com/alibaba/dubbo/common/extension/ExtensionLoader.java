@@ -482,6 +482,10 @@ public class ExtensionLoader<T> {
         return new IllegalStateException(buf.toString());
     }
 
+    /**
+     * @Description 创建扩展点实例，如果含有wrapperClasses 则返回wrapperClasses的包装类
+     *              如果存在两个Wrapper（如：ProtocolListenerWrapper,ProtocolFilterWrapper）,则循环包装
+     */
     @SuppressWarnings("unchecked")
     private T createExtension(String name) {
         Class<?> clazz = getExtensionClasses().get(name);

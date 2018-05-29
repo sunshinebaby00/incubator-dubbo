@@ -14,26 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.dubbo.examples.generic.impl;
+package com.alibaba.dubbo.examples.stub;
 
-import com.alibaba.dubbo.examples.generic.api.IUserService;
-import com.alibaba.dubbo.rpc.RpcContext;
-import com.alibaba.dubbo.rpc.service.GenericException;
-import com.alibaba.dubbo.rpc.service.GenericService;
+import com.alibaba.dubbo.examples.stub.api.BarService;
+import com.alibaba.dubbo.examples.validation.ValidationProvider;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class UserServiceImpl implements IUserService ,GenericService{
+/**
+ * ValidationConsumer
+ */
+public class StubProvider {
 
-    public User get(Params params) {
-        String index = RpcContext.getContext().getAttachment("index");
-
-        return new User(1, "charles");
+    public static void main(String[] args) throws Exception {
+        String config = StubProvider.class.getPackage().getName().replace('.', '/') + "/stub-provider.xml";
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(config);
+        context.start();
+        System.in.read();
     }
 
-    @Override
-    public Object $invoke(String method, String[] parameterTypes, Object[] args) throws GenericException {
-        if ("get".equals(method)) {
-            return "Welcome " + args[0];
-        }
-        return null;
-    }
 }

@@ -20,20 +20,22 @@ limitations under the License.
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
-
     <!-- provider's application name, used for tracing dependency relationship -->
     <dubbo:application name="demo-provider"/>
-
+    <!--<dubbo:monitor protocol="registry"></dubbo:monitor>-->
     <!-- use multicast registry center to export service -->
-    <dubbo:registry address="multicast://224.5.6.7:1234"/>
+    <!--<dubbo:registry address="multicast://224.5.6.7:1234"/>-->
+    <!--订阅并注册在zk上-->
+    <dubbo:registry id="aliZk" protocol="zookeeper" address="47.94.102.25:2181"/>
+    <dubbo:registry id="vmZk" protocol="zookeeper" address="192.168.0.100:2181" check="false" />
 
     <!-- use dubbo protocol to export service on port 20880 -->
-    <dubbo:protocol name="dubbo" port="20880"/>
-
+    <!--配置线程模式-->
+    <dubbo:protocol name="dubbo" port="20881" dispatcher="execution" threadpool="cached" threads="5"/>
     <!-- service implementation, as same as regular local bean -->
     <bean id="demoService" class="com.alibaba.dubbo.demo.provider.DemoServiceImpl"/>
 
     <!-- declare the service interface to be exported -->
-    <dubbo:service interface="com.alibaba.dubbo.demo.DemoService" ref="demoService"/>
+    <dubbo:service interface="com.alibaba.dubbo.demo.DemoService" ref="demoService" protocol="dubbo" registry="aliZk"/>
 
 </beans>
