@@ -16,6 +16,7 @@
  */
 package com.alibaba.dubbo.demo.provider;
 
+import com.alibaba.dubbo.container.Main;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Provider {
@@ -26,8 +27,13 @@ public class Provider {
         System.setProperty("java.net.preferIPv4Stack", "true");
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"META-INF/spring/dubbo-demo-provider.xml"});
         context.start();
-
         System.in.read(); // press any key to exit
+
+        //使用配置文件的容器启动
+/*
+        Main.main(args);
+*/
     }
+
 
 }
