@@ -36,6 +36,7 @@ public class CallbackConsumer {
                 System.out.println("callback1:" + msg);
             }
         });
+        callbackService.get(0);
         System.in.read();
     }
 

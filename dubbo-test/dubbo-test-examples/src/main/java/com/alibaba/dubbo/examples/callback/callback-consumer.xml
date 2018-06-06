@@ -24,7 +24,10 @@ limitations under the License.
     <dubbo:application name="callback-consumer"/>
 
     <dubbo:registry address="multicast://224.5.6.7:1234"/>
+    <bean id ="demoCallback" class = "com.alibaba.dubbo.examples.callback.impl.NotifyImpl" />
 
-    <dubbo:reference id="callbackService" interface="com.alibaba.dubbo.examples.callback.api.CallbackService"/>
+    <dubbo:reference id="callbackService" interface="com.alibaba.dubbo.examples.callback.api.CallbackService" >
+        <dubbo:method name="get"  onreturn="demoCallback.onreturn" ></dubbo:method>
+    </dubbo:reference>
 
 </beans>

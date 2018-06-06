@@ -16,12 +16,12 @@
  */
 package com.alibaba.dubbo.demo.provider;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.dubbo.demo.DemoService;
 import com.alibaba.dubbo.rpc.RpcContext;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 public class DemoServiceImpl implements DemoService {
 
     public String sayHello(String name) {

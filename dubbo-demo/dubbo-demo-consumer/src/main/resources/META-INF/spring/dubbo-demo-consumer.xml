@@ -29,10 +29,10 @@ limitations under the License.
     <!--<dubbo:registry address="multicast://224.5.6.7:1234"/>-->
     <dubbo:registry address="zookeeper://47.94.102.25:2181"/>
 
-    <dubbo:monitor protocol="registry"></dubbo:monitor>
-
     <!-- generate proxy for the remote service, then demoService can be used in the same way as the
     local regular interface -->
-    <dubbo:reference id="demoService" check="false" interface="com.alibaba.dubbo.demo.DemoService"/>
-
+    <dubbo:reference id="demoService" check="false" interface="com.alibaba.dubbo.demo.DemoService" loadbalance="consistenthash"/>
+<!--
+    <dubbo:monitor address="47.94.102.25:7070"></dubbo:monitor>
+-->
 </beans>
