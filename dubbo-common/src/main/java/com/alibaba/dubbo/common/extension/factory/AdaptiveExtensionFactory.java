@@ -31,7 +31,13 @@ import java.util.List;
 public class AdaptiveExtensionFactory implements ExtensionFactory {
 
     private final List<ExtensionFactory> factories;
-
+    /**
+     * @Author pengyunlong
+     * @Description 获取到所有普通ExtensionFactory的实现，并创建ExtensionFactory的实例
+     *              SpiExtensionFactory，SpringExtensionFactory
+     * @param
+     * @Date 2018/6/7 17:58
+     */
     public AdaptiveExtensionFactory() {
         ExtensionLoader<ExtensionFactory> loader = ExtensionLoader.getExtensionLoader(ExtensionFactory.class);
         List<ExtensionFactory> list = new ArrayList<ExtensionFactory>();
@@ -40,7 +46,12 @@ public class AdaptiveExtensionFactory implements ExtensionFactory {
         }
         factories = Collections.unmodifiableList(list);
     }
-
+    /**
+     * @Author pengyunlong
+     * @Description 从所有的ExtensionFactory实例中（包括spring容器和普通spi），加载扩展点指定扩展点实例
+     * @param
+     * @Date 2018/6/7 18:01
+     */
     public <T> T getExtension(Class<T> type, String name) {
         for (ExtensionFactory factory : factories) {
             T extension = factory.getExtension(type, name);

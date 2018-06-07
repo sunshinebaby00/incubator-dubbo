@@ -25,16 +25,7 @@
                   <resource>META-INF/spring.handlers</resource>
                 </transformer>
                 <transformer>
-                  <resource>META-INF/dubbo/internal/com.alibaba.dubbo.rpc.Protocol</resource>
-                </transformer>
-                <transformer>
-                  <resource>META-INF/dubbo/internal/com.alibaba.dubbo.common.extension.ExtensionFactory</resource>
-                </transformer>
-                <transformer>
                   <resource>META-INF/spring.schemas</resource>
-                </transformer>
-                <transformer>
-                  <mainClass>com.alibaba.dubbo.demo.consumer.Consumer</mainClass>
                 </transformer>
               </transformers>
             </configuration>

@@ -93,8 +93,16 @@ public class ExtensionLoader<T> {
 
     private Map<String, IllegalStateException> exceptions = new ConcurrentHashMap<String, IllegalStateException>();
 
+    /**
+     * @Author pengyunlong
+     * @Description 扩展点加载器
+     * @param
+     * @Date 2018/6/7 18:38
+     */
     private ExtensionLoader(Class<?> type) {
+        //当前扩展点的接口类型必须,含有SPI注解
         this.type = type;
+        //objectFactory IOC需要从这个变量中获取对象实例
         objectFactory = (type == ExtensionFactory.class ? null : ExtensionLoader.getExtensionLoader(ExtensionFactory.class).getAdaptiveExtension());
     }
 
@@ -306,6 +314,7 @@ public class ExtensionLoader<T> {
             synchronized (holder) {
                 instance = holder.get();
                 if (instance == null) {
+                    //创建扩展点
                     instance = createExtension(name);
                     holder.set(instance);
                 }
@@ -336,7 +345,12 @@ public class ExtensionLoader<T> {
             return false;
         }
     }
-
+    /**
+     * @Author pengyunlong
+     * @Description 获取所有普通扩展点名称
+     * @param
+     * @Date 2018/6/7 18:06
+     */
     public Set<String> getSupportedExtensions() {
         Map<String, Class<?>> clazzes = getExtensionClasses();
         return Collections.unmodifiableSet(new TreeSet<String>(clazzes.keySet()));
@@ -488,6 +502,7 @@ public class ExtensionLoader<T> {
      */
     @SuppressWarnings("unchecked")
     private T createExtension(String name) {
+        //
         Class<?> clazz = getExtensionClasses().get(name);
         if (clazz == null) {
             throw findException(name);
@@ -502,6 +517,7 @@ public class ExtensionLoader<T> {
             Set<Class<?>> wrapperClasses = cachedWrapperClasses;
             if (wrapperClasses != null && !wrapperClasses.isEmpty()) {
                 for (Class<?> wrapperClass : wrapperClasses) {
+                    //生成一个包装类的实例
                     instance = injectExtension((T) wrapperClass.getConstructor(type).newInstance(instance));
                 }
             }
@@ -511,7 +527,12 @@ public class ExtensionLoader<T> {
                     type + ")  could not be instantiated: " + t.getMessage(), t);
         }
     }
-
+    /**
+     * @Author pengyunlong
+     * @Description 含有set开头的方法则动态属性注入
+     * @param
+     * @Date 2018/6/7 17:50
+     */
     private T injectExtension(T instance) {
         try {
             if (objectFactory != null) {
@@ -550,6 +571,12 @@ public class ExtensionLoader<T> {
         return clazz;
     }
 
+    /**
+     * @Author pengyunlong
+     * @Description 如果缓存为空则加载所有的扩展class并缓存起来
+     * @param
+     * @Date 2018/6/7 17:08
+     */
     private Map<String, Class<?>> getExtensionClasses() {
         Map<String, Class<?>> classes = cachedClasses.get();
         if (classes == null) {
@@ -564,6 +591,14 @@ public class ExtensionLoader<T> {
         return classes;
     }
 
+    /**
+     * @Author pengyunlong
+     * @Description 从三个路径加载spi配置的class到缓存中，cachedDefaultName为@SPI的value
+     *              META-INF/dubbo/internal/ META-INF/dubbo/ META-INF/services/
+     * @param
+     * @return extensionClasses为不含有Adaptive,Activate注解的普通class
+     * @Date 2018/6/7 17:18
+     */
     // synchronized in getExtensionClasses
     private Map<String, Class<?>> loadExtensionClasses() {
         final SPI defaultAnnotation = type.getAnnotation(SPI.class);
@@ -586,6 +621,16 @@ public class ExtensionLoader<T> {
         return extensionClasses;
     }
 
+    /**
+     * @Author pengyunlong
+     * @Description 从指定目录读取Spi配置文件，分析class并加入缓存
+     *              1.cachedAdaptiveClass   含有Adaptive注解的class
+     *              2.cachedWrapperClasses  含有构造函数的参数为扩展点接口类型的扩展点 1.Filter 2.Listener
+     *              3.cachedActivates       含有Activate注解的class
+     *              4.cachedNames           其余的class
+     * @param
+     * @Date 2018/6/7 17:13
+     */
     private void loadFile(Map<String, Class<?>> extensionClasses, String dir) {
         String fileName = dir + type.getName();
         try {
@@ -730,7 +775,14 @@ public class ExtensionLoader<T> {
         com.alibaba.dubbo.common.compiler.Compiler compiler = ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.common.compiler.Compiler.class).getAdaptiveExtension();
         return compiler.compile(code, classLoader);
     }
-
+    /**
+     * @Author pengyunlong
+     * @Description 创建AdaptiveExtensionClass，
+     *              调用这个类的方法会根据参数获取到实际扩展点名称，
+     *              然后再调用扩展点的对应的方法
+     * @param
+     * @Date 2018/6/7 17:43
+     */
     private String createAdaptiveExtensionClassCode() {
         StringBuilder codeBuidler = new StringBuilder();
         Method[] methods = type.getMethods();
