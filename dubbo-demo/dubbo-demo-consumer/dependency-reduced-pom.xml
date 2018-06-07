@@ -9,6 +9,37 @@
   <artifactId>dubbo-demo-consumer</artifactId>
   <name>${project.artifactId}</name>
   <description>The demo consumer module of dubbo project</description>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <transformers>
+                <transformer>
+                  <resource>META-INF/spring.handlers</resource>
+                </transformer>
+                <transformer>
+                  <resource>META-INF/dubbo/internal/com.alibaba.dubbo.rpc.Protocol</resource>
+                </transformer>
+                <transformer>
+                  <resource>META-INF/spring.schemas</resource>
+                </transformer>
+                <transformer>
+                  <mainClass>com.alibaba.dubbo.demo.consumer.Consumer</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>

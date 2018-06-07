@@ -10,25 +10,35 @@
   <name>${project.artifactId}</name>
   <description>The demo provider module of dubbo project</description>
   <build>
-    <resources>
-      <resource>
-        <targetPath>${project.build.directory}/classes</targetPath>
-        <filtering>true</filtering>
-        <directory>src/main/resources</directory>
-        <includes>
-          <include>**/*.xml</include>
-          <include>**/*.properties</include>
-        </includes>
-      </resource>
-      <resource>
-        <targetPath>${project.build.directory}/classes/META-INF/spring</targetPath>
-        <filtering>true</filtering>
-        <directory>src/main/resources/spring</directory>
-        <includes>
-          <include>spring-context.xml</include>
-        </includes>
-      </resource>
-    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <transformers>
+                <transformer>
+                  <resource>META-INF/spring.handlers</resource>
+                </transformer>
+                <transformer>
+                  <resource>META-INF/dubbo/internal/com.alibaba.dubbo.rpc.Protocol</resource>
+                </transformer>
+                <transformer>
+                  <resource>META-INF/spring.schemas</resource>
+                </transformer>
+                <transformer>
+                  <mainClass>com.alibaba.dubbo.demo.provider.Provider</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
   <dependencies>
     <dependency>
