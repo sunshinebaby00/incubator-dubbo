@@ -33,8 +33,8 @@ limitations under the License.
         <module>dubbo-demo-api</module>
         <module>dubbo-demo-provider</module>
         <module>dubbo-demo-consumer</module>
+        <module>dubbo-demo-adaptive</module>
     </modules>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -46,5 +46,25 @@ limitations under the License.
             </dependency>
         </dependencies>
     </dependencyManagement>
-
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

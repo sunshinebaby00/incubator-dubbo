@@ -1,7 +1,8 @@
 package com.alibaba.dubbo.rpc;
 import com.alibaba.dubbo.common.extension.ExtensionLoader;
+
 public class ProxyFactory$Adaptive implements com.alibaba.dubbo.rpc.ProxyFactory {
-    public java.lang.Object getProxy(com.alibaba.dubbo.rpc.Invoker arg0) throws com.alibaba.dubbo.rpc.RpcException {
+    public Object getProxy(com.alibaba.dubbo.rpc.Invoker arg0) throws com.alibaba.dubbo.rpc.RpcException {
         if (arg0 == null) throw new IllegalArgumentException("com.alibaba.dubbo.rpc.Invoker argument == null");
         if (arg0.getUrl() == null) throw new IllegalArgumentException("com.alibaba.dubbo.rpc.Invoker argument getUrl() == null");com.alibaba.dubbo.common.URL url = arg0.getUrl();
         String extName = url.getParameter("proxy", "javassist");
@@ -9,7 +10,7 @@ public class ProxyFactory$Adaptive implements com.alibaba.dubbo.rpc.ProxyFactory
         com.alibaba.dubbo.rpc.ProxyFactory extension = (com.alibaba.dubbo.rpc.ProxyFactory)ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.rpc.ProxyFactory.class).getExtension(extName);
         return extension.getProxy(arg0);
     }
-    public com.alibaba.dubbo.rpc.Invoker getInvoker(java.lang.Object arg0, java.lang.Class arg1, com.alibaba.dubbo.common.URL arg2) throws com.alibaba.dubbo.rpc.RpcException {
+    public com.alibaba.dubbo.rpc.Invoker getInvoker(Object arg0, Class arg1, com.alibaba.dubbo.common.URL arg2) throws com.alibaba.dubbo.rpc.RpcException {
         if (arg2 == null) throw new IllegalArgumentException("url == null");
         com.alibaba.dubbo.common.URL url = arg2;
         String extName = url.getParameter("proxy", "javassist");

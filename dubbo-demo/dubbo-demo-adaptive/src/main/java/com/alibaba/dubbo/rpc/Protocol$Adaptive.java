@@ -1,11 +1,13 @@
+
 package com.alibaba.dubbo.rpc;
 import com.alibaba.dubbo.common.extension.ExtensionLoader;
+
 public class Protocol$Adaptive implements com.alibaba.dubbo.rpc.Protocol {
     public void destroy() {throw new UnsupportedOperationException("method public abstract void com.alibaba.dubbo.rpc.Protocol.destroy() of interface com.alibaba.dubbo.rpc.Protocol is not adaptive method!");
     }
     public int getDefaultPort() {throw new UnsupportedOperationException("method public abstract int com.alibaba.dubbo.rpc.Protocol.getDefaultPort() of interface com.alibaba.dubbo.rpc.Protocol is not adaptive method!");
     }
-    public com.alibaba.dubbo.rpc.Invoker refer(java.lang.Class arg0, com.alibaba.dubbo.common.URL arg1) throws com.alibaba.dubbo.rpc.RpcException {
+    public com.alibaba.dubbo.rpc.Invoker refer(Class arg0, com.alibaba.dubbo.common.URL arg1) throws com.alibaba.dubbo.rpc.RpcException {
         if (arg1 == null) throw new IllegalArgumentException("url == null");
         com.alibaba.dubbo.common.URL url = arg1;
         String extName = ( url.getProtocol() == null ? "dubbo" : url.getProtocol() );
