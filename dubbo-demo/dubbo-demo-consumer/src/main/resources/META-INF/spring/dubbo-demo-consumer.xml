@@ -33,7 +33,9 @@ limitations under the License.
 
     <!-- generate proxy for the remote service, then demoService can be used in the same way as the
     local regular interface -->
-    <dubbo:reference id="demoService" check="false" interface="com.alibaba.dubbo.demo.DemoService" loadbalance="consistenthash"/>
+    <dubbo:reference id="demoService" check="false" interface="com.alibaba.dubbo.demo.DemoService" loadbalance="consistenthash">
+        <dubbo:method name="sayHello" ></dubbo:method>
+    </dubbo:reference>
 <!--
     <dubbo:monitor address="47.94.102.25:7070"></dubbo:monitor>
 -->

@@ -45,6 +45,12 @@ public abstract class AbstractLoadBalance implements LoadBalance {
 
     protected abstract <T> Invoker<T> doSelect(List<Invoker<T>> invokers, URL url, Invocation invocation);
 
+    /**
+     * @Author pengyunlong
+     * @Description 获取服务器的启动时间，如果启动时间小于预热时间阈值则进行降权，warmup默认600000
+     * @param
+     * @Date 2018/6/12 11:00
+     */
     protected int getWeight(Invoker<?> invoker, Invocation invocation) {
         int weight = invoker.getUrl().getMethodParameter(invocation.getMethodName(), Constants.WEIGHT_KEY, Constants.DEFAULT_WEIGHT);
         if (weight > 0) {

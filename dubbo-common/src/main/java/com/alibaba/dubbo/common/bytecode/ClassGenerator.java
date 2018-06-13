@@ -30,6 +30,7 @@ import javassist.CtNewMethod;
 import javassist.LoaderClassPath;
 import javassist.NotFoundException;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -132,6 +133,7 @@ public final class ClassGenerator {
         if (mFields == null)
             mFields = new ArrayList<String>();
         mFields.add(code);
+        System.out.println(code);
         return this;
     }
 
@@ -155,6 +157,7 @@ public final class ClassGenerator {
         if (mMethods == null)
             mMethods = new ArrayList<String>();
         mMethods.add(code);
+        System.out.println(code);
         return this;
     }
 
@@ -292,6 +295,12 @@ public final class ClassGenerator {
                     }
                 }
             }
+            //打印mCtc内容到文件中
+           /* try {
+                mCtc.writeFile("test.java");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
             return mCtc.toClass(loader, pd);
         } catch (RuntimeException e) {
             throw e;

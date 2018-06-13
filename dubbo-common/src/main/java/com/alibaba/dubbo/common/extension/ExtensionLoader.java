@@ -95,14 +95,15 @@ public class ExtensionLoader<T> {
 
     /**
      * @Author pengyunlong
-     * @Description 扩展点加载器
+     * @Description 构造方法
+     *              扩展点加载器
      * @param
      * @Date 2018/6/7 18:38
      */
     private ExtensionLoader(Class<?> type) {
         //当前扩展点的接口类型必须,含有SPI注解
         this.type = type;
-        //objectFactory IOC需要从这个变量中获取对象实例
+        //objectFactory IOC需要从这个变量中加载对象实例并注入
         objectFactory = (type == ExtensionFactory.class ? null : ExtensionLoader.getExtensionLoader(ExtensionFactory.class).getAdaptiveExtension());
     }
 
@@ -110,6 +111,13 @@ public class ExtensionLoader<T> {
         return type.isAnnotationPresent(SPI.class);
     }
 
+    /**
+     * @Author pengyunlong
+     * @Description 静态方法，单例模式
+     *              首先从缓存中获取扩展点加载器，如果缓存中不存在则创建并加入缓存
+     * @param
+     * @Date 2018/6/11 11:36
+     */
     @SuppressWarnings("unchecked")
     public static <T> ExtensionLoader<T> getExtensionLoader(Class<T> type) {
         if (type == null)
@@ -124,6 +132,7 @@ public class ExtensionLoader<T> {
 
         ExtensionLoader<T> loader = (ExtensionLoader<T>) EXTENSION_LOADERS.get(type);
         if (loader == null) {
+            //缓存中不存在则创建扩展点加载器并加如缓存
             EXTENSION_LOADERS.putIfAbsent(type, new ExtensionLoader<T>(type));
             loader = (ExtensionLoader<T>) EXTENSION_LOADERS.get(type);
         }
@@ -296,6 +305,7 @@ public class ExtensionLoader<T> {
     /**
      * Find the extension with the given name. If the specified name is not found, then {@link IllegalStateException}
      * will be thrown.
+     * 根据扩展点名称找到指定的扩展点，首先从缓存中获取，如果缓存中不存在则创建并加入缓存
      */
     @SuppressWarnings("unchecked")
     public T getExtension(String name) {
@@ -314,7 +324,7 @@ public class ExtensionLoader<T> {
             synchronized (holder) {
                 instance = holder.get();
                 if (instance == null) {
-                    //创建扩展点
+                    //创建扩展点实例
                     instance = createExtension(name);
                     holder.set(instance);
                 }
@@ -497,12 +507,15 @@ public class ExtensionLoader<T> {
     }
 
     /**
-     * @Description 创建扩展点实例，如果含有wrapperClasses 则返回wrapperClasses的包装类
-     *              如果存在两个Wrapper（如：ProtocolListenerWrapper,ProtocolFilterWrapper）,则循环包装
+     * @Description
+     *              加载字节码
+     *              创建实例
+     *              注入属性
+     *              包装
      */
     @SuppressWarnings("unchecked")
     private T createExtension(String name) {
-        //
+        //1.获取指定扩展点的Class
         Class<?> clazz = getExtensionClasses().get(name);
         if (clazz == null) {
             throw findException(name);
@@ -510,14 +523,16 @@ public class ExtensionLoader<T> {
         try {
             T instance = (T) EXTENSION_INSTANCES.get(clazz);
             if (instance == null) {
+                //2.创建扩展点实例
                 EXTENSION_INSTANCES.putIfAbsent(clazz, (T) clazz.newInstance());
                 instance = (T) EXTENSION_INSTANCES.get(clazz);
             }
+            //3.实现dubbo IOC功能，从spring和dubbo中注入属性到扩展点实例中来
             injectExtension(instance);
             Set<Class<?>> wrapperClasses = cachedWrapperClasses;
             if (wrapperClasses != null && !wrapperClasses.isEmpty()) {
                 for (Class<?> wrapperClass : wrapperClasses) {
-                    //生成一个包装类的实例
+                    //4.实现dubbo AOP功能,包装扩展点实例
                     instance = injectExtension((T) wrapperClass.getConstructor(type).newInstance(instance));
                 }
             }

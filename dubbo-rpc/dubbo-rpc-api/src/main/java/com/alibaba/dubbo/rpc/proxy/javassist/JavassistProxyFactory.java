@@ -28,12 +28,23 @@ import com.alibaba.dubbo.rpc.proxy.InvokerInvocationHandler;
  * JavaassistRpcProxyFactory
  */
 public class JavassistProxyFactory extends AbstractProxyFactory {
-
+    /**
+     * @Author pengyunlong
+     * @Description 服务引用生成动态代理
+     * @param 
+     * @Date 2018/6/13 15:51
+     */
     @SuppressWarnings("unchecked")
     public <T> T getProxy(Invoker<T> invoker, Class<?>[] interfaces) {
         return (T) Proxy.getProxy(interfaces).newInstance(new InvokerInvocationHandler(invoker));
     }
 
+    /**
+     * @Author pengyunlong
+     * @Description 服务暴露不生成动态代理生成wrapper直接调用本地的方法
+     * @param
+     * @Date 2018/6/13 15:49
+     */
     public <T> Invoker<T> getInvoker(T proxy, Class<T> type, URL url) {
         // TODO Wrapper cannot handle this scenario correctly: the classname contains '$'
         final Wrapper wrapper = Wrapper.getWrapper(proxy.getClass().getName().indexOf('$') < 0 ? proxy.getClass() : type);
