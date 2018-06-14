@@ -455,7 +455,12 @@ public class ExtensionLoader<T> {
             cachedAdaptiveInstance.set(null);
         }
     }
-
+    /**
+     * @Author pengyunlong
+     * @Description 每次只需要从缓存中取出AdaptiveInstance，如果没有命中则创建并加入缓存
+     * @param
+     * @Date 2018/6/14 17:03
+     */
     @SuppressWarnings("unchecked")
     public T getAdaptiveExtension() {
         Object instance = cachedAdaptiveInstance.get();
@@ -766,7 +771,12 @@ public class ExtensionLoader<T> {
         }
         return extension.value();
     }
-
+    /**
+     * @Author pengyunlong
+     * @Description 获取AdaptiveExtensionClass字节码并创建实例然后IOC注入
+     * @param
+     * @Date 2018/6/14 17:04
+     */
     @SuppressWarnings("unchecked")
     private T createAdaptiveExtension() {
         try {
@@ -775,7 +785,12 @@ public class ExtensionLoader<T> {
             throw new IllegalStateException("Can not create adaptive extension " + type + ", cause: " + e.getMessage(), e);
         }
     }
-
+    /**
+     * @Author pengyunlong
+     * @Description 扩展类上有@Adaptive注解的直接返回该类，如果没有则动态创建
+     * @param
+     * @Date 2018/6/14 16:28
+     */
     private Class<?> getAdaptiveExtensionClass() {
         getExtensionClasses();
         if (cachedAdaptiveClass != null) {
@@ -784,6 +799,12 @@ public class ExtensionLoader<T> {
         return cachedAdaptiveClass = createAdaptiveExtensionClass();
     }
 
+    /**
+     * @Author pengyunlong
+     * @Description 动态编译
+     * @param
+     * @Date 2018/6/14 16:38
+     */
     private Class<?> createAdaptiveExtensionClass() {
         String code = createAdaptiveExtensionClassCode();
         ClassLoader classLoader = findClassLoader();
@@ -792,8 +813,8 @@ public class ExtensionLoader<T> {
     }
     /**
      * @Author pengyunlong
-     * @Description 创建AdaptiveExtensionClass，
-     *              调用这个类的方法会根据参数获取到实际扩展点名称，
+     * @Description 生成AdaptiveExtensionClass的代码，
+     *              调用动态生成的这个类的方法会根据参数获取到实际扩展点名称，
      *              然后再调用扩展点的对应的方法
      * @param
      * @Date 2018/6/7 17:43
